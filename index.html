@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Winter Watch</title>
   <style>
-    :root { color-scheme: light; --bg:#f2f5f8; --surface:#fff; --surface-alt:#f7f9fc; --text:#192b40; --muted:#5c6c7f; --line:#dce4ec; --navy:#183754; --accent:#dceaf4; --accent-text:#285677; --treat-bg:#e6f1eb; --treat:#326349; --review-bg:#f7efdf; --review:#805c20; --hold-bg:#eef1f5; --hold:#536174; --error:#a33439; }
-    :root[data-theme="dark"] { color-scheme:dark; --bg:#0e1928; --surface:#162437; --surface-alt:#1c2e43; --text:#e4edf5; --muted:#a9bbcd; --line:#304257; --navy:#bfd8ee; --accent:#233e55; --accent-text:#c0dced; --treat-bg:#203b32; --treat:#b1d9bf; --review-bg:#413824; --review:#ebd39c; --hold-bg:#29394c; --hold:#bdcbda; --error:#f2b2b5; }
+    :root { color-scheme: light; --bg:#f2f5f8; --surface:#fff; --surface-alt:#f7f9fc; --text:#192b40; --muted:#5c6c7f; --line:#dce4ec; --navy:#183754; --accent:#dceaf4; --accent-text:#285677; --treat:#15803D; --treat-bg:#eaf6ee; --treat-ink:#166534; --treat-icon:#15803D; --review:#D97706; --review-bg:#fffbeb; --review-ink:#92400e; --review-icon:#D97706; --hold:#64748B; --hold-bg:#eef2f6; --hold-ink:#475569; --hold-icon:#64748B; --row-treat:#f2faf5; --row-hold:#f8fafc; --row-review:#fff9ed; --error:#a33439; }
+    :root[data-theme="dark"] { color-scheme:dark; --bg:#0e1928; --surface:#162437; --surface-alt:#1c2e43; --text:#e4edf5; --muted:#a9bbcd; --line:#304257; --navy:#bfd8ee; --accent:#233e55; --accent-text:#c0dced; --treat-bg:#203d2d; --treat-ink:#b0edc3; --treat-icon:#86efac; --review-bg:#43351f; --review-ink:#ffdc9e; --review-icon:#fbbf24; --hold-bg:#2a3a4e; --hold-ink:#d0dbe8; --hold-icon:#bccbdc; --row-treat:#193327; --row-hold:#1b2a3c; --row-review:#352d21; --error:#f2b2b5; }
     * { box-sizing:border-box; }
     [hidden] { display:none !important; }
     body { margin:0; background:var(--bg); color:var(--text); font:15px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif; }
@@ -61,16 +61,37 @@
     .routes-heading h2 { margin:0; }
     .count-tag { background:var(--accent); color:var(--accent-text); font-size:11px; font-weight:650; border-radius:5px; padding:3px 7px; }
     .route-list { padding:0; margin:0; list-style:none; }
-    .route-item { border-top:1px solid var(--line); padding:12px 0; display:grid; grid-template-columns:minmax(0,1fr) auto; gap:4px 12px; align-items:center; }
+    .route-item { border-top:1px solid var(--line); border-inline-start:3px solid transparent; border-radius:5px; margin:5px 0; padding:11px 10px; display:grid; grid-template-columns:minmax(0,1fr) auto; gap:4px 12px; align-items:center; }
     .route-name { font-size:12px; font-weight:600; overflow-wrap:anywhere; }
     .route-meta { grid-column:1 / -1; font-size:11px; color:var(--muted); }
     .status { display:inline-flex; align-items:center; gap:6px; padding:3px 8px; border-radius:5px; font-size:10px; font-weight:700; white-space:nowrap; }
-    .status::before { content:""; width:5px; height:5px; border-radius:50%; background:currentColor; }
-    .status-treat { background:var(--treat-bg); color:var(--treat); }
-    .status-hold { background:var(--hold-bg); color:var(--hold); }
-    .status-review { background:var(--review-bg); color:var(--review); }
+    .status-icon { width:14px; height:14px; flex:none; fill:none; stroke:currentColor; stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round; }
+    .status-treat .status-icon { color:var(--treat-icon); }
+    .status-hold .status-icon { color:var(--hold-icon); }
+    .status-review .status-icon { color:var(--review-icon); }
+    .status-treat { background:var(--treat-bg); color:var(--treat-ink); }
+    .status-hold { background:var(--hold-bg); color:var(--hold-ink); }
+    .status-review { background:var(--review-bg); color:var(--review-ink); }
+    .route-item.row-treat { background:var(--row-treat); border-inline-start-color:var(--treat); }
+    .route-item.row-hold { background:var(--row-hold); border-inline-start-color:var(--hold); }
+    .route-item.row-review { background:var(--row-review); border-inline-start-color:var(--review); }
+    .timing-flag,.resource-flag { display:inline-flex; align-items:center; gap:4px; color:var(--review-ink); background:var(--review-bg); padding:1px 5px; border-radius:4px; font-size:10px; margin-top:4px; }
+    .timing-flag .status-icon,.resource-flag .status-icon { color:var(--review-icon); width:12px; height:12px; }
+    .resource-alert { display:flex; gap:10px; align-items:flex-start; border:1px solid var(--line); border-inline-start:3px solid var(--review); border-radius:6px; background:var(--review-bg); padding:11px 12px; margin-bottom:8px; color:var(--review-ink); }
+    .resource-alert .status { flex:none; }
+    .metric-label { display:flex; align-items:center; gap:6px; }
+    .metric-treat .metric-label .status-icon { color:var(--treat-icon); }
+    .metric-treat .metric-value { color:var(--treat-ink); }
+    #metric-resource-card .metric-label .status-icon { color:var(--review-icon); }
+    .metric.has-review { background:var(--review-bg); border-top:3px solid var(--review); }
+    .metric.has-review .metric-value,.metric.has-review .metric-label { color:var(--review-ink); }
+    #decision-summary { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px; }
+    .decision-row.row-treat td { background:var(--row-treat); }
+    .decision-row.row-hold td { background:var(--row-hold); }
+    .decision-row.row-review td { background:var(--row-review); }
+    .decision-detail { display:block; font-size:11px; margin-top:5px; color:var(--muted); }
     .route-empty { padding:22px 0; color:var(--muted); font-size:13px; }
-    .legend { display:flex; flex-wrap:wrap; gap:8px; margin:16px 0 12px; }
+    .legend { display:flex; flex-wrap:wrap; gap:8px; margin:0 0 14px; }
     #dashboard-updated { font-size:11px; color:var(--muted); margin:0; }
     #route-report-link { margin-top:16px; width:100%; font-size:12px; background:var(--surface-alt); }
     .support-heading { margin:30px 0 14px; display:flex; align-items:baseline; justify-content:space-between; gap:12px; }
@@ -122,9 +143,9 @@
     </div>
   </header>
   <div class="summary-grid" aria-label="Current operations summary" aria-live="polite">
-    <div class="metric"><span class="metric-label">Routes to treat</span><strong class="metric-value" id="metric-treat">&mdash;</strong><p class="metric-note">Recommended under the current forecast</p></div>
+    <div class="metric metric-treat"><span class="metric-label"><svg class="status-icon" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><circle cx="10" cy="10" r="7.5"/><path d="m6.5 10 2.3 2.3 4.7-4.7"/></svg>Routes to treat</span><strong class="metric-value" id="metric-treat">&mdash;</strong><p class="metric-note">Recommended under the current forecast</p></div>
     <div class="metric"><span class="metric-label">Lowest ground temperature</span><strong class="metric-value" id="metric-temperature">&mdash;</strong><p class="metric-note">Next 18 forecast hours</p></div>
-    <div class="metric"><span class="metric-label">Depot resource warnings</span><strong class="metric-value" id="metric-warnings">&mdash;</strong><p class="metric-note" id="metric-warning-note">Salt, truck and driver availability</p></div>
+    <div class="metric" id="metric-resource-card"><span class="metric-label"><svg class="status-icon" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M10 2.5 18 17H2Z"/><path d="M10 7v4"/><circle cx="10" cy="14" r=".6" fill="currentColor" stroke="none"/></svg>Depot resource warnings</span><strong class="metric-value" id="metric-warnings">&mdash;</strong><p class="metric-note" id="metric-warning-note">Salt, truck and driver availability</p></div>
   </div>
   <main>
   <div class="dashboard-main">
@@ -153,8 +174,8 @@
     <aside class="routes-panel" aria-label="Route overview">
       <div class="routes-heading"><h2>Route overview</h2><span class="count-tag" id="route-count">Awaiting data</span></div>
       <p class="panel-intro">Current recommendations at a glance.</p>
+      <div class="legend" aria-label="Route status key"><span class="status status-treat"><svg class="status-icon" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><circle cx="10" cy="10" r="7.5"/><path d="m6.5 10 2.3 2.3 4.7-4.7"/></svg><span>Treat</span></span><span class="status status-hold"><svg class="status-icon" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><circle cx="10" cy="10" r="7.5"/><path d="M6.5 10h7"/></svg><span>Hold</span></span><span class="status status-review"><svg class="status-icon" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M10 2.5 18 17H2Z"/><path d="M10 7v4"/><circle cx="10" cy="14" r=".6" fill="currentColor" stroke="none"/></svg><span>Review</span></span></div>
       <ul id="route-overview" class="route-list"><li class="route-empty">Loading current route conditions...</li></ul>
-      <div class="legend" aria-label="Route status key"><span class="status status-treat">Treat</span><span class="status status-hold">Hold</span><span class="status status-review">Review</span></div>
       <p id="dashboard-updated" role="status">Fetching current sources...</p>
       <button type="button" id="route-report-link">View full route report</button>
     </aside>
@@ -163,7 +184,8 @@
   <div class="supporting-reports">
   <details id="tonight" hidden>
     <summary>Tonight's Call</summary>
-    <p id="warnings" role="status"></p>
+    <div id="decision-summary" aria-label="Route decision summary"></div>
+    <div id="warnings" role="status"></div>
     <div class="table-wrap"><table>
       <thead><tr><th>Route</th><th>Priority</th><th>Depot</th><th>Lowest ground temp</th><th>Wet?</th><th>Salt needed</th><th>Decision</th><th>Departure time</th></tr></thead>
       <tbody id="route-results"></tbody>
@@ -226,9 +248,26 @@
       const theme=document.documentElement.dataset.theme==='dark'?'light':'dark';
       applyTheme(theme);try{localStorage.setItem(themeStorageKey,theme)}catch{}
     });
+    const statusIconPaths = {"Treat": "<circle cx=\"10\" cy=\"10\" r=\"7.5\"/><path d=\"m6.5 10 2.3 2.3 4.7-4.7\"/>", "Hold": "<circle cx=\"10\" cy=\"10\" r=\"7.5\"/><path d=\"M6.5 10h7\"/>", "Review": "<path d=\"M10 2.5 18 17H2Z\"/><path d=\"M10 7v4\"/><circle cx=\"10\" cy=\"14\" r=\".6\" fill=\"currentColor\" stroke=\"none\"/>"};
+
+    function statusIcon(state) {
+      const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
+      svg.setAttribute('class','status-icon');svg.setAttribute('viewBox','0 0 20 20');svg.setAttribute('aria-hidden','true');svg.setAttribute('focusable','false');
+      svg.innerHTML=statusIconPaths[state];return svg;
+    }
+    const routeStatus = r => r.decision.startsWith('Recommend')?'Treat':r.decision.startsWith('Hold')?'Hold':'Review';
+    function statusBadge(state,label=state) {
+      const badge=document.createElement('span');badge.className='status status-'+state.toLowerCase();
+      const text=document.createElement('span');text.textContent=label;badge.append(statusIcon(state),text);return badge;
+    }
+    function secondaryFlag(label,className) {
+      const flag=document.createElement('span');flag.className=className;
+      const text=document.createElement('span');text.textContent=label;flag.append(statusIcon('Review'),text);return flag;
+    }
     let dashboardGeneration=0;
     function clearDashboard(message) {
       for(const id of ['metric-treat','metric-temperature','metric-warnings'])el(id).textContent='\u2014';
+      el('metric-resource-card').classList.remove('has-review');
       el('metric-warning-note').textContent='Salt, truck and driver availability';
       el('route-count').textContent='Awaiting data';
       el('route-overview').replaceChildren();
@@ -239,18 +278,24 @@
       el('metric-treat').textContent=String(calculated.rows.filter(r=>r.decision.startsWith('Recommend')).length);
       el('metric-temperature').textContent=Math.min(...calculated.rows.map(r=>r.min)).toFixed(1)+'\u00b0C';
       el('metric-warnings').textContent=String(calculated.warnings.length);
+      el('metric-resource-card').classList.toggle('has-review',calculated.warnings.length>0);
       const warningDepots=Object.keys(calculated.resources).filter(name=>calculated.warnings.some(w=>w.startsWith(name+':')));
       el('metric-warning-note').textContent=warningDepots.length?warningDepots.join(' / '):'No stock or availability alerts';
       el('route-count').textContent=calculated.rows.length+' routes';
       el('route-overview').replaceChildren();
       for(const r of calculated.rows) {
-        const state=r.decision.startsWith('Recommend')?'Treat':r.decision.startsWith('Hold')?'Hold':'Review';
-        const li=document.createElement('li');li.className='route-item';
+        const state=routeStatus(r);
+        const li=document.createElement('li');li.className='route-item row-'+state.toLowerCase();
         const name=document.createElement('span');name.className='route-name';name.textContent=r.id+' '+r.route;
-        const badge=document.createElement('span');badge.className='status status-'+state.toLowerCase();badge.textContent=state;badge.title=r.decision;
+        const badge=statusBadge(state);badge.title=r.decision;
         const meta=document.createElement('span');meta.className='route-meta';meta.textContent=r.min.toFixed(1)+'\u00b0C ground / '+r.salt.toFixed(2)+' t salt / '+r.depot;
-        if(state==='Treat')meta.textContent+=' / '+departureLabel(r);
+        if(state==='Treat') {
+          if(r.departure===null)meta.append(document.createTextNode(' / '),secondaryFlag('Timing review','timing-flag'));
+          else meta.textContent+=' / '+departureLabel(r);
+        }
         else if(state==='Review')meta.textContent+=' / '+r.decision.replace(/^Blocked - /,'');
+        const resourceWarnings=calculated.warnings.filter(w=>w.startsWith(r.depot+':'));
+        if(resourceWarnings.length){const flag=secondaryFlag('Depot alert','resource-flag');flag.title=resourceWarnings.join(' ');meta.append(document.createTextNode(' / '),flag)}
         li.append(name,badge,meta);el('route-overview').append(li);
       }
       el('dashboard-updated').textContent='Live calculations / '+displayTime(Date.parse(calculated.asOf))+' Dublin. Full source timestamps in the route report.';
@@ -642,12 +687,22 @@
       renderDashboard(calculated);
       el('route-results').replaceChildren();
       for (const r of calculated.rows) {
-        const tr=document.createElement('tr');
+        const tr=document.createElement('tr');tr.className='decision-row row-'+routeStatus(r).toLowerCase();
         const values=[r.id+' '+r.route,r.priority,r.depot,r.min.toFixed(1)+' \u00b0C',r.wet?'Yes':'No',r.salt.toFixed(2)+' t',r.decision,departureLabel(r)];
-        for (const value of values) { const td=document.createElement('td'); td.textContent=value; tr.append(td); }
+        for (const [index,value] of values.entries()) {
+          const td=document.createElement('td');
+          if(index===6){const detail=document.createElement('span');detail.className='decision-detail';detail.textContent=value;td.append(statusBadge(routeStatus(r)),detail)}
+          else if(index===7 && routeStatus(r)==='Treat' && r.departure===null)td.append(secondaryFlag(value,'timing-flag'));
+          else td.textContent=value;
+          tr.append(td);
+        }
         el('route-results').append(tr);
       }
-      el('warnings').textContent=calculated.warnings.join(' ') || 'No depot stock or availability warnings.';
+      el('decision-summary').replaceChildren();
+      for(const state of ['Treat','Hold','Review'])el('decision-summary').append(statusBadge(state,state+' '+calculated.rows.filter(r=>routeStatus(r)===state).length));
+      el('warnings').replaceChildren();
+      if(!calculated.warnings.length)el('warnings').textContent='No depot stock or availability warnings.';
+      for(const warning of calculated.warnings){const alert=document.createElement('div');alert.className='resource-alert';const text=document.createElement('span');text.textContent=warning;alert.append(statusBadge('Review'),text);el('warnings').append(alert)}
       el('sources').replaceChildren();
       for (const source of Object.values(data)) {
         const p=document.createElement('p'), a=document.createElement('a'); a.href=source.url; a.textContent=source.name; a.target='_blank'; a.rel='noopener noreferrer';
