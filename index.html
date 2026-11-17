@@ -117,6 +117,82 @@
     @media(max-width:900px) { .app-shell{padding:24px} .dashboard-main{grid-template-columns:minmax(0,1.15fr) minmax(285px,.85fr);gap:16px} .chat-panel,.routes-panel{padding:20px} .metric{padding:17px} }
     @media(max-width:720px) { .app-shell{padding:20px 16px} .app-header{align-items:flex-start;flex-direction:column;gap:18px;margin-bottom:22px} .header-tools{width:100%;justify-content:flex-end} #settings-form{width:min(430px,calc(100vw - 32px))} .dashboard-main{grid-template-columns:minmax(0,1fr)} .summary-grid{gap:8px} .metric{padding:13px 10px} .metric-label{font-size:10px;min-height:30px} .metric-value{font-size:25px} .metric-note{font-size:10px} .support-heading{align-items:flex-start;flex-direction:column;gap:3px} .question-hint{max-width:60%} details{padding:0 14px} th,td{padding:8px} table{min-width:640px} }
     @media(max-width:380px) { .summary-grid{grid-template-columns:minmax(0,1fr)} .metric{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 10px;align-items:center} .metric-label{min-height:0} .metric-value{grid-column:2;grid-row:1 / 3;margin:0} .metric-note{grid-column:1} }
+
+    .app-shell { width:min(1340px,100%); }
+    .overview-toolbar { display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:14px; }
+    .overview-toolbar .eyebrow { margin:0; }
+    .live-tools { display:flex; align-items:center; gap:12px; }
+    #live-refresh { font-size:11px; padding:6px 10px; background:transparent; }
+    .summary-grid { gap:0; border:1px solid var(--line); border-radius:10px; overflow:hidden; background:var(--surface); margin-bottom:16px; }
+    .metric { border:0; border-radius:0; padding:20px 24px; border-right:1px solid var(--line); box-shadow:inset 0 3px 0 var(--accent); }
+    .metric:last-child { border-right:0; }
+    .metric-treat { box-shadow:inset 0 3px 0 var(--treat); }
+    .metric-value { font-size:42px; line-height:1.15; margin:9px 0; }
+    .metric.has-review { border:0; box-shadow:inset 0 3px 0 var(--review); }
+    .operations-alerts { padding:14px 18px; border:1px solid var(--line); border-radius:8px; background:var(--surface); margin-bottom:24px; }
+    .alerts-heading { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:9px; }
+    .alerts-heading h2 { font-size:13px; margin:0; }
+    #operations-alert-list { list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
+    .ops-alert { border-inline-start:3px solid var(--review); background:var(--surface-alt); padding:9px 12px; min-width:0; border-radius:3px; }
+    .ops-alert.severity-action { background:var(--review-bg); }
+    .ops-alert-title { display:flex; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:3px; font-size:12px; }
+    .ops-alert p { font-size:11px; margin:3px 0 0; color:var(--muted); overflow-wrap:anywhere; }
+    .ops-alert.severity-action p { color:var(--review-ink); }
+    .ops-alert button { padding:0; border:0; background:transparent; color:var(--accent-text); font-size:11px; margin-top:5px; text-decoration:underline; text-underline-offset:3px; }
+    .dashboard-main { grid-template-columns:minmax(0,.9fr) minmax(0,1.3fr); gap:22px; }
+    .chat-panel,.routes-panel { padding:22px; }
+    #result { background:var(--surface-alt); border:1px solid var(--line); border-inline-start:3px solid var(--accent-text); border-radius:6px; padding:16px; margin-top:20px; }
+    #result h2 { color:var(--accent-text); text-transform:uppercase; font-size:10px; letter-spacing:1px; }
+    .question-shortcuts { display:flex; flex-wrap:wrap; gap:6px; margin:0 0 18px; }
+    .question-shortcuts button { font-size:11px; font-weight:500; padding:6px 9px; background:var(--surface-alt); }
+    .route-tools { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin:14px 0 12px; }
+    .route-filters { display:flex; gap:4px; flex-wrap:wrap; }
+    .route-filter { padding:5px 8px; font-size:11px; font-weight:500; background:transparent; border-color:transparent; }
+    .route-filter[aria-pressed="true"] { background:var(--accent); border-color:var(--line); color:var(--accent-text); font-weight:700; }
+    .filter-count { font-size:10px; opacity:.8; margin-left:4px; font-variant-numeric:tabular-nums; }
+    #route-sort { width:auto; max-width:100%; font-size:11px; padding:6px 8px; background:var(--surface-alt); }
+    .operations-table { table-layout:fixed; min-width:0; }
+    .operations-table th,.operations-table td { padding:10px 8px; font-size:11px; }
+    .operations-table th { font-size:9px; line-height:1.45; }
+    .operations-table th:nth-child(1) { width:28%; }
+    .operations-table th:nth-child(2) { width:9%; }
+    .operations-table th:nth-child(3) { width:14%; }
+    .operations-table th:nth-child(4) { width:17%; }
+    .operations-table th:nth-child(5) { width:32%; }
+    .operations-table .route-item { display:table-row; padding:0; margin:0; border-radius:0; }
+    .operations-table .route-item.row-treat > td { background:var(--row-treat); }
+    .operations-table .route-item.row-hold > td { background:var(--row-hold); }
+    .operations-table .route-item.row-review > td { background:var(--row-review); }
+    .operations-table .route-item > td:first-child { border-inline-start:3px solid var(--hold); }
+    .operations-table .row-treat > td:first-child { border-inline-start-color:var(--treat); }
+    .operations-table .row-review > td:first-child { border-inline-start-color:var(--review); }
+    .route-depot { display:block; font-size:10px; color:var(--muted); margin-top:3px; }
+    .route-temp { font-variant-numeric:tabular-nums; font-weight:650; white-space:nowrap; }
+    .warning-stack { display:flex; flex-wrap:wrap; gap:4px; align-items:flex-start; }
+    .warning-stack .timing-flag,.warning-stack .resource-flag { margin:0; white-space:normal; line-height:1.5; }
+    .warning-copy { font-size:10px; color:var(--review-ink); }
+    #route-view-status { font-size:11px; color:var(--muted); margin:10px 0 0; }
+    .sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+    .historical-insights { border-top:1px solid var(--line); padding-top:22px; margin-top:24px; }
+    .historical-insights h2 { font-size:15px; margin-bottom:6px; }
+    .insight-legend { display:flex; flex-wrap:wrap; gap:12px; font-size:10px; color:var(--muted); margin:12px 0; }
+    .insight-legend span { display:inline-flex; align-items:center; gap:5px; }
+    .insight-swatch { width:14px; height:5px; background:#527c9a; display:inline-block; border-radius:2px; }
+    .insight-swatch.untreated { background:#8b9eaf; }
+    .insight-chart { display:grid; gap:7px; }
+    .insight-row { display:grid; grid-template-columns:32px minmax(0,1fr) 50px; gap:9px; align-items:center; font-size:10px; }
+    .insight-route { color:var(--muted); font-weight:600; }
+    .insight-bars { display:grid; gap:3px; }
+    .insight-track { height:5px; background:var(--surface-alt); border-radius:2px; overflow:hidden; }
+    .insight-bar { height:100%; background:#527c9a; }
+    .insight-bar.untreated { background:#8b9eaf; }
+    .insight-counts { color:var(--muted); text-align:right; font-variant-numeric:tabular-nums; }
+    :root[data-theme="dark"] .insight-swatch,:root[data-theme="dark"] .insight-bar { background:#7ba5c3; }
+    :root[data-theme="dark"] .insight-swatch.untreated,:root[data-theme="dark"] .insight-bar.untreated { background:#b0beca; }
+    .insights-link { margin-top:12px; font-size:11px; padding:0; border:0; background:transparent; color:var(--accent-text); text-decoration:underline; text-underline-offset:3px; }
+    @media(max-width:1050px) { .dashboard-main{grid-template-columns:minmax(0,1fr)} .routes-panel{grid-row:1} .chat-panel{grid-row:2} .operations-table th,.operations-table td{padding:10px} }
+    @media(max-width:720px) { .app-header{margin-bottom:18px} .overview-toolbar{align-items:flex-start;flex-direction:column;gap:8px} .live-tools{width:100%;justify-content:space-between} .metric{padding:14px 12px} .metric-value{font-size:32px} #operations-alert-list{grid-template-columns:minmax(0,1fr)} .operations-alerts{padding:12px;margin-bottom:16px} .chat-panel,.routes-panel{padding:16px} .route-tools{align-items:flex-start} .operations-table{display:block;min-width:0;width:100%} .operations-table thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)} .operations-table tbody{display:grid;gap:8px} .operations-table .route-item{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--line);border-radius:6px;overflow:hidden} .operations-table .route-item td{display:block;border:0;padding:7px 10px;min-width:0} .operations-table .route-item td:first-child{grid-column:1 / -1}  .operations-table td:not(:first-child)::before{content:attr(data-label);display:block;font-size:9px;color:var(--muted);margin-bottom:3px;font-weight:500} .operations-table .route-item .route-empty{grid-column:1 / -1} .routes-panel > .table-wrap{border:0;border-radius:0;overflow:visible} .route-name{font-size:12px} .dashboard-main .routes-panel{grid-row:auto} .dashboard-main .chat-panel{grid-row:auto} }
+    @media(max-width:380px) { .summary-grid{display:grid;grid-template-columns:1fr} .metric{border-right:0;border-bottom:1px solid var(--line);box-shadow:none} .metric:last-child{border-bottom:0} .metric.has-review{box-shadow:inset 3px 0 0 var(--review)} }
   </style>
 </head>
 <body>
@@ -142,16 +218,19 @@
   </details>
     </div>
   </header>
+  <div class="overview-toolbar"><span class="eyebrow">Operational overview</span><div class="live-tools"><p id="dashboard-updated" role="status">Fetching current sources...</p><button type="button" id="live-refresh">Refresh live data</button></div></div>
   <div class="summary-grid" aria-label="Current operations summary" aria-live="polite">
     <div class="metric metric-treat"><span class="metric-label"><svg class="status-icon" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><circle cx="10" cy="10" r="7.5"/><path d="m6.5 10 2.3 2.3 4.7-4.7"/></svg>Routes to treat</span><strong class="metric-value" id="metric-treat">&mdash;</strong><p class="metric-note">Recommended under the current forecast</p></div>
-    <div class="metric"><span class="metric-label">Lowest ground temperature</span><strong class="metric-value" id="metric-temperature">&mdash;</strong><p class="metric-note">Next 18 forecast hours</p></div>
+    <div class="metric"><span class="metric-label"><svg class="status-icon" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M8 11.5V4a2 2 0 0 1 4 0v7.5a4 4 0 1 1-4 0Z"/><path d="M10 7v7"/><circle cx="10" cy="15" r="1"/></svg>Lowest ground temperature</span><strong class="metric-value" id="metric-temperature">&mdash;</strong><p class="metric-note">Next 18 forecast hours</p></div>
     <div class="metric" id="metric-resource-card"><span class="metric-label"><svg class="status-icon" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M10 2.5 18 17H2Z"/><path d="M10 7v4"/><circle cx="10" cy="14" r=".6" fill="currentColor" stroke="none"/></svg>Depot resource warnings</span><strong class="metric-value" id="metric-warnings">&mdash;</strong><p class="metric-note" id="metric-warning-note">Salt, truck and driver availability</p></div>
   </div>
+  <section class="operations-alerts" aria-labelledby="alerts-title"><div class="alerts-heading"><h2 id="alerts-title">Operational attention</h2><span class="count-tag" id="operations-alert-count">Awaiting data</span></div><ul id="operations-alert-list"><li class="note">Current alerts will appear when live data is available.</li></ul></section>
   <main>
   <div class="dashboard-main">
     <div class="chat-panel">
       <span class="eyebrow">Decision support</span><h2>Ask Winter Watch</h2>
       <p class="panel-intro">A clear answer for tonight, the past five winters or your next decision.</p>
+  <div class="question-shortcuts" aria-label="Suggested questions"><button type="button" data-question="What needs treatment tonight?">What needs treatment tonight?</button><button type="button" data-question="Which depots need attention?">Which depots need attention?</button><button type="button" data-question="What should change next winter?">What should change next winter?</button></div>
   <form id="question-form">
     <label for="question">Your question</label>
     <textarea id="question" required placeholder="Which routes should we treat tonight, and what constraints need attention?"></textarea>
@@ -169,14 +248,16 @@
     <p id="error" role="status" hidden></p>
     <p id="usage" class="note">Token usage: no request yet.</p>
   </details>
+  <section class="historical-insights" aria-labelledby="insights-title"><span class="eyebrow">Five winters at a glance</span><h2 id="insights-title">Ice incidents: treated vs untreated</h2><p class="note" id="insights-status">Loading historical evidence...</p><div class="insight-legend"><span><i class="insight-swatch" aria-hidden="true"></i>Treated nights (T)</span><span><i class="insight-swatch untreated" aria-hidden="true"></i>Untreated nights (U)</span></div><div id="insight-chart" class="insight-chart" role="list" aria-label="Ice incidents by route"></div><button type="button" class="insights-link" id="insights-report-link">View historical totals and exclusions</button></section>
   <p id="loading" role="status" hidden>Waiting for Gemini…</p>
     </div>
     <aside class="routes-panel" aria-label="Route overview">
       <div class="routes-heading"><h2>Route overview</h2><span class="count-tag" id="route-count">Awaiting data</span></div>
       <p class="panel-intro">Current recommendations at a glance.</p>
       <div class="legend" aria-label="Route status key"><span class="status status-treat"><svg class="status-icon" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><circle cx="10" cy="10" r="7.5"/><path d="m6.5 10 2.3 2.3 4.7-4.7"/></svg><span>Treat</span></span><span class="status status-hold"><svg class="status-icon" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><circle cx="10" cy="10" r="7.5"/><path d="M6.5 10h7"/></svg><span>Hold</span></span><span class="status status-review"><svg class="status-icon" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M10 2.5 18 17H2Z"/><path d="M10 7v4"/><circle cx="10" cy="14" r=".6" fill="currentColor" stroke="none"/></svg><span>Review</span></span></div>
-      <ul id="route-overview" class="route-list"><li class="route-empty">Loading current route conditions...</li></ul>
-      <p id="dashboard-updated" role="status">Fetching current sources...</p>
+      <div class="route-tools"><div class="route-filters" role="group" aria-label="Filter routes"><button type="button" class="route-filter" data-route-filter="All" aria-pressed="true">All<span class="filter-count"></span></button><button type="button" class="route-filter" data-route-filter="Treat" aria-pressed="false">Treat<span class="filter-count"></span></button><button type="button" class="route-filter" data-route-filter="Hold" aria-pressed="false">Hold<span class="filter-count"></span></button><button type="button" class="route-filter" data-route-filter="Review" aria-pressed="false">Review<span class="filter-count"></span></button></div><label class="sr-only" for="route-sort">Sort routes</label><select id="route-sort"><option value="route">Route order</option><option value="priority">Priority first</option><option value="temperature">Coldest first</option></select></div>
+      <div class="table-wrap"><table class="operations-table" role="table" aria-label="Current route decisions"><thead><tr><th scope="col">Route</th><th scope="col">Priority</th><th scope="col">Lowest ground</th><th scope="col">Treatment</th><th scope="col">Operational warning</th></tr></thead><tbody id="route-overview"><tr><td class="route-empty" colspan="5">Loading current route conditions...</td></tr></tbody></table></div>
+      <p id="route-view-status" role="status">All routes will appear once data is available.</p>
       <button type="button" id="route-report-link">View full route report</button>
     </aside>
   </div>
@@ -264,14 +345,89 @@
       const flag=document.createElement('span');flag.className=className;
       const text=document.createElement('span');text.textContent=label;flag.append(statusIcon('Review'),text);return flag;
     }
+
+    let dashboardSnapshot=null;
+    const routeView={filter:'All',sort:'route'};
+    function submitSuggestedQuestion(question) {
+      if(el('send').disabled)return;
+      el('question').value=question;el('question-form').requestSubmit();
+    }
+    document.querySelectorAll('[data-question]').forEach(button=>button.addEventListener('click',()=>submitSuggestedQuestion(button.dataset.question)));
+    document.querySelectorAll('[data-route-filter]').forEach(button=>button.addEventListener('click',()=>{routeView.filter=button.dataset.routeFilter;renderRouteTable()}));
+    el('route-sort').addEventListener('change',()=>{routeView.sort=el('route-sort').value;renderRouteTable()});
+    el('insights-report-link').addEventListener('click',()=>{el('history-panel').open=true;el('history-panel').scrollIntoView({behavior:'auto',block:'start'})});
+    el('live-refresh').addEventListener('click',async()=>{
+      if(el('send').disabled||el('live-refresh').disabled)return;
+      dashboardGeneration++;clearDashboard('Refreshing live data...');engineerReviewCache=null;el('engineer-answer').hidden=true;el('engineer-status').textContent='Refreshing current evidence...';await loadDashboard();
+    });
+    function renderRouteTable() {
+      if(!dashboardSnapshot)return;
+      const all=dashboardSnapshot.rows;
+      const rows=all.filter(r=>routeView.filter==='All'||routeStatus(r)===routeView.filter);
+      rows.sort((a,b)=>routeView.sort==='priority'?a.priority-b.priority||a.id.localeCompare(b.id):routeView.sort==='temperature'?a.min-b.min||a.id.localeCompare(b.id):a.id.localeCompare(b.id));
+      document.querySelectorAll('[data-route-filter]').forEach(button=>{
+        const filter=button.dataset.routeFilter;
+        button.setAttribute('aria-pressed',String(filter===routeView.filter));
+        button.querySelector('.filter-count').textContent=filter==='All'?all.length:all.filter(r=>routeStatus(r)===filter).length;
+      });
+      el('route-overview').replaceChildren();
+      for(const r of rows) {
+        const state=routeStatus(r),tr=document.createElement('tr');tr.className='route-item row-'+state.toLowerCase();tr.dataset.routeId=r.id;
+        const name=document.createElement('td'),title=document.createElement('span'),depot=document.createElement('span');
+        title.className='route-name';title.textContent=r.id+' '+r.route;depot.className='route-depot';depot.textContent=r.depot;name.append(title,depot);
+        const priority=document.createElement('td');priority.dataset.label='Priority';priority.textContent='P'+r.priority;
+        const temp=document.createElement('td');temp.dataset.label='Lowest ground';temp.className='route-temp';temp.textContent=r.min.toFixed(1)+'\u00b0C';
+        const treatment=document.createElement('td');treatment.dataset.label='Treatment';const badge=statusBadge(state);badge.title=r.decision;treatment.append(badge);
+        const warning=document.createElement('td');warning.dataset.label='Operational warning';const warnings=document.createElement('div');warnings.className='warning-stack';
+        if(state==='Treat'&&r.departure===null)warnings.append(secondaryFlag('Timing review','timing-flag'));
+        else if(state==='Treat'){const time=document.createElement('span');time.textContent='Leave '+displayTime(r.departure);time.className='note';warnings.append(time)}
+        if(state==='Hold'&&r.decision.includes('below 40%'))warnings.append(secondaryFlag('Stock below Priority 3 minimum','resource-flag'));
+        if(state==='Review'){const text=document.createElement('span');text.className='warning-copy';text.textContent=r.decision.replace(/^Blocked - /,'');warnings.append(text)}
+        const depotWarnings=dashboardSnapshot.warnings.filter(w=>w.startsWith(r.depot+':'));
+        if(depotWarnings.length){const flag=secondaryFlag('Depot alert','resource-flag');flag.title=depotWarnings.join(' ');warnings.append(flag)}
+        if(!warnings.childNodes.length)warnings.textContent='\u2014';
+        warning.append(warnings);tr.append(name,priority,temp,treatment,warning);el('route-overview').append(tr);
+      }
+      if(!rows.length){const tr=document.createElement('tr'),td=document.createElement('td');td.colSpan=5;td.className='route-empty';td.textContent='No '+routeView.filter.toLowerCase()+' routes. Choose All to see every route.';tr.append(td);el('route-overview').append(tr)}
+      el('route-view-status').textContent='Showing '+rows.length+' of '+all.length+' routes. Timing review does not change treatment status.';
+    }
+    function renderOperationalAlerts(calculated) {
+      const entries=[];
+      for(const [name,d]of Object.entries(calculated.resources)) {
+        const warnings=calculated.warnings.filter(w=>w.startsWith(name+':'));
+        if(!warnings.length)continue;
+        const critical=!d.trucks||!d.drivers||d.stock<d.reserve;
+        const issues=[];
+        if(!d.trucks)issues.push('No available trucks');
+        if(!d.drivers)issues.push('No available drivers');
+        if(warnings.some(w=>/salt|reserve/i.test(w)))issues.push((warnings.some(w=>/dangerously low salt/i.test(w))?'Low salt: ':'Salt reserve: ')+fmt(d.stock)+' t ('+(100*d.stock/d.capacity).toFixed(1)+'% capacity)');
+        entries.push({title:name+': '+issues.join('; '),severity:critical?'Action required':'Replenishment',critical,action:critical?'Duty Engineer to confirm feasible cover before dispatch.':'Check replenishment and treatment cover; delivery or transfers are not assured.',question:'Which resource problems affect '+name+' tonight?'});
+      }
+      for(const r of calculated.rows.filter(r=>r.decision.startsWith('Blocked')||r.decision.includes('below 40%'))) {
+        if(entries.some(e=>e.title.startsWith(r.depot+':'))&&!/timing|duty|slot/i.test(r.decision))continue;
+        entries.push({title:r.id+': '+r.decision.replace(/^(Blocked|Hold) - /,''),severity:'Action required',critical:true,action:'Duty Engineer to review feasibility before dispatch.',question:'What prevents treatment on '+r.id+' tonight?'});
+      }
+      el('operations-alert-list').replaceChildren();el('operations-alert-count').textContent=entries.length+' '+(entries.length===1?'alert':'alerts');
+      for(const entry of entries){const li=document.createElement('li');li.className='ops-alert '+(entry.critical?'severity-action':'severity-watch');const heading=document.createElement('div');heading.className='ops-alert-title';const title=document.createElement('strong');title.textContent=entry.title;heading.append(statusBadge('Review',entry.severity),title);const action=document.createElement('p');action.textContent=entry.action;const button=document.createElement('button');button.type='button';button.textContent='Ask about this';button.addEventListener('click',()=>submitSuggestedQuestion(entry.question));li.append(heading,action,button);el('operations-alert-list').append(li)}
+      if(!entries.length){const li=document.createElement('li');li.className='note';li.textContent='No verified resource or dispatch constraints are currently flagged.';el('operations-alert-list').append(li)}
+    }
+    function renderHistoricalInsights(cache) {
+      el('insight-chart').replaceChildren();
+      const rows=cache.analysis.rows,max=Math.max(1,...rows.flatMap(r=>[r.treated_incidents,r.untreated_incidents]));
+      for(const r of rows){const row=document.createElement('div');row.className='insight-row';row.setAttribute('role','listitem');row.setAttribute('aria-label',r.route_id+' '+r.route+': '+r.treated_incidents+' treated-night incidents, '+r.untreated_incidents+' untreated-night incidents');const label=document.createElement('span');label.className='insight-route';label.textContent=r.route_id;label.title=r.route;const bars=document.createElement('div');bars.className='insight-bars';bars.setAttribute('aria-hidden','true');for(const [value,type]of [[r.treated_incidents,'treated'],[r.untreated_incidents,'untreated']]){const track=document.createElement('div');track.className='insight-track';const bar=document.createElement('div');bar.className='insight-bar '+type;bar.style.width=(100*value/max)+'%';track.append(bar);bars.append(track)}const counts=document.createElement('span');counts.className='insight-counts';counts.textContent='T '+r.treated_incidents+' / U '+r.untreated_incidents;row.append(label,bars,counts);el('insight-chart').append(row)}
+      el('insights-status').textContent='Cleaned records. Counts show reported ice, not treatment effectiveness.';
+    }
     let dashboardGeneration=0;
     function clearDashboard(message) {
+      dashboardSnapshot=null;
       for(const id of ['metric-treat','metric-temperature','metric-warnings'])el(id).textContent='\u2014';
       el('metric-resource-card').classList.remove('has-review');
       el('metric-warning-note').textContent='Salt, truck and driver availability';
       el('route-count').textContent='Awaiting data';
+      document.querySelectorAll('.filter-count').forEach(count=>{count.textContent='\u2014'});
       el('route-overview').replaceChildren();
-      const li=document.createElement('li');li.className='route-empty';li.textContent=message;el('route-overview').append(li);
+      const row=document.createElement('tr'),cell=document.createElement('td');cell.className='route-empty';cell.colSpan=5;cell.textContent=message;row.append(cell);el('route-overview').append(row);
+      el('route-view-status').textContent=message;el('operations-alert-count').textContent='Awaiting data';el('operations-alert-list').replaceChildren();const notice=document.createElement('li');notice.className='note';notice.textContent=message;el('operations-alert-list').append(notice);
       el('dashboard-updated').textContent=message;
     }
     function renderDashboard(calculated) {
@@ -282,36 +438,23 @@
       const warningDepots=Object.keys(calculated.resources).filter(name=>calculated.warnings.some(w=>w.startsWith(name+':')));
       el('metric-warning-note').textContent=warningDepots.length?warningDepots.join(' / '):'No stock or availability alerts';
       el('route-count').textContent=calculated.rows.length+' routes';
-      el('route-overview').replaceChildren();
-      for(const r of calculated.rows) {
-        const state=routeStatus(r);
-        const li=document.createElement('li');li.className='route-item row-'+state.toLowerCase();
-        const name=document.createElement('span');name.className='route-name';name.textContent=r.id+' '+r.route;
-        const badge=statusBadge(state);badge.title=r.decision;
-        const meta=document.createElement('span');meta.className='route-meta';meta.textContent=r.min.toFixed(1)+'\u00b0C ground / '+r.salt.toFixed(2)+' t salt / '+r.depot;
-        if(state==='Treat') {
-          if(r.departure===null)meta.append(document.createTextNode(' / '),secondaryFlag('Timing review','timing-flag'));
-          else meta.textContent+=' / '+departureLabel(r);
-        }
-        else if(state==='Review')meta.textContent+=' / '+r.decision.replace(/^Blocked - /,'');
-        const resourceWarnings=calculated.warnings.filter(w=>w.startsWith(r.depot+':'));
-        if(resourceWarnings.length){const flag=secondaryFlag('Depot alert','resource-flag');flag.title=resourceWarnings.join(' ');meta.append(document.createTextNode(' / '),flag)}
-        li.append(name,badge,meta);el('route-overview').append(li);
-      }
-      el('dashboard-updated').textContent='Live calculations / '+displayTime(Date.parse(calculated.asOf))+' Dublin. Full source timestamps in the route report.';
+      dashboardSnapshot=calculated;renderRouteTable();renderOperationalAlerts(calculated);
+      el('dashboard-updated').textContent='Updated '+displayTime(Date.parse(calculated.asOf))+' Dublin';
     }
     async function loadDashboard() {
       const generation=dashboardGeneration;
+      el('live-refresh').disabled=true;
       const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),90000);
       try {
         const fresh=await freshData(controller.signal),calculated=calculate(fresh);
         if(generation!==dashboardGeneration)return;
         render(calculated,fresh);
+        if(historyCache)renderEngineerReview(historyCache,fresh,calculated);
       } catch(error) {
         if(generation!==dashboardGeneration)return;
         clearDashboard('Current conditions unavailable. Ask a question to retry.');
         diagnostic(error.message,keyInput.value.trim());
-      } finally {clearTimeout(timeout)}
+      } finally {clearTimeout(timeout);el('live-refresh').disabled=false}
     }
     el('route-report-link').addEventListener('click',()=>{
       if(el('tonight').hidden){el('dashboard-updated').textContent='Current route data is unavailable. Ask a question to refresh it.';return}
@@ -474,6 +617,7 @@
       return describe('Most incidents on treated nights',rankings.treated)+'. '+describe('Most incidents on untreated nights',rankings.untreated)+'. Rankings use cleaned data; ties are listed.';
     }
     function renderHistory(cache) {
+      renderHistoricalInsights(cache);
       const a=cache.analysis;
       el('history-counts').textContent='Original rows: '+cache.parsed.length+'; excluded rows: '+a.exclusions.length+'; cleaned rows: '+a.totals.nights+'. Above-40 C rows: '+a.impossibleRows+'; missing/invalid numeric rows: '+a.invalidNumericRows+'.';
       el('history-raw-totals').textContent='RAW ORIGINAL TOTALS - Nights: '+a.raw.nights+'; gritting runs: '+a.raw.gritting_runs+'; salt: '+a.raw.salt_t.toFixed(2)+' t; ice incidents: '+a.raw.ice_incidents+'; treated-night incidents: '+a.raw.treated_incidents+'; untreated-night incidents: '+a.raw.untreated_incidents+'; no salt nights: '+a.raw.no_salt_nights+'. '+(Object.values(a.rawMissing).some(n=>n) ? 'Incomplete: see quality warnings.' : 'All raw aggregation fields valid.');
@@ -490,6 +634,7 @@
     function loadHistory() {
       if (historyLoading) return historyLoading;
       historyCache=null;
+      el('insight-chart').replaceChildren();el('insights-status').textContent='Historical evidence is refreshing...';
       engineerReviewCache=null;
       el('engineer-answer').hidden=true;
       el('engineer-status').textContent='Historical evidence is refreshing; send a question afterwards to rebuild the review.';
@@ -508,6 +653,7 @@
           el('history-status').textContent='Fetched '+fetchedAt+' (UTC). Parsed data cached in memory until refresh or reload.';
           return historyCache;
         } catch (error) {
+          el('insights-status').textContent='Historical evidence unavailable. Refresh Five Winters to retry.';
           el('history-status').textContent='Historical source failed ('+historySource+'): '+(error.name==='AbortError'?'request timed out':error.message)+'. No previous data substituted. Use Refresh historical data to retry.';
           return null;
         } finally { clearTimeout(timeout); el('history-refresh').disabled=false; }
