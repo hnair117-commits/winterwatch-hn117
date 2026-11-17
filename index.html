@@ -5,29 +5,106 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Winter Watch</title>
   <style>
-    body { font: 16px/1.5 system-ui, sans-serif; max-width: 850px; margin: 32px auto; padding: 0 20px; color: #18232b; }
-    details, section { border: 1px solid #bac4cc; border-radius: 5px; padding: 18px; margin: 20px 0; }
-    summary { cursor: pointer; font-weight: 600; }
-    label { display: block; margin-top: 16px; font-weight: 600; }
-    input, select, textarea { box-sizing: border-box; width: 100%; font: inherit; padding: 9px; border: 1px solid #87949e; border-radius: 3px; }
-    textarea { min-height: 110px; resize: vertical; }
-    button { font: inherit; padding: 8px 16px; margin: 14px 8px 0 0; cursor: pointer; }
-    button:disabled { cursor: wait; opacity: .6; }
-    .note { font-size: .9rem; color: #465762; }
-    #error { color: #a11a1a; white-space: pre-wrap; overflow-wrap: anywhere; }
-    #response { white-space: pre-wrap; overflow-wrap: anywhere; }
-    #loading { font-weight: 600; }
-    .table-wrap { overflow-x: auto; }
-    table { border-collapse: collapse; width: 100%; font-size: .85rem; }
-    th, td { text-align: left; padding: 7px; border: 1px solid #bac4cc; vertical-align: top; }
-    #sources { overflow-wrap: anywhere; }
-    h2 { font-size: 1.15rem; margin-top: 0; }
+    :root { color-scheme: light; --bg:#f2f5f8; --surface:#fff; --surface-alt:#f7f9fc; --text:#192b40; --muted:#5c6c7f; --line:#dce4ec; --navy:#183754; --accent:#dceaf4; --accent-text:#285677; --treat-bg:#e6f1eb; --treat:#326349; --review-bg:#f7efdf; --review:#805c20; --hold-bg:#eef1f5; --hold:#536174; --error:#a33439; }
+    :root[data-theme="dark"] { color-scheme:dark; --bg:#0e1928; --surface:#162437; --surface-alt:#1c2e43; --text:#e4edf5; --muted:#a9bbcd; --line:#304257; --navy:#bfd8ee; --accent:#233e55; --accent-text:#c0dced; --treat-bg:#203b32; --treat:#b1d9bf; --review-bg:#413824; --review:#ebd39c; --hold-bg:#29394c; --hold:#bdcbda; --error:#f2b2b5; }
+    * { box-sizing:border-box; }
+    [hidden] { display:none !important; }
+    body { margin:0; background:var(--bg); color:var(--text); font:15px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif; }
+    button,input,select,textarea { font:inherit; }
+    button,summary,a,input,select,textarea { -webkit-tap-highlight-color:transparent; }
+    button:focus-visible,summary:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible { outline:3px solid var(--accent-text); outline-offset:3px; }
+    a { color:var(--accent-text); text-underline-offset:3px; overflow-wrap:anywhere; }
+    h1,h2,p { margin-top:0; }
+    h1 { font-size:26px; line-height:1.2; letter-spacing:-.7px; margin-bottom:5px; }
+    h2 { font-size:18px; line-height:1.35; letter-spacing:-.3px; margin-bottom:12px; }
+    .app-shell { width:min(1240px,100%); margin:auto; padding:32px 32px 20px; }
+    .app-header { display:flex; align-items:center; justify-content:space-between; gap:24px; margin-bottom:30px; }
+    .brand { display:flex; align-items:center; gap:14px; min-width:0; }
+    .brand-mark { flex:none; width:48px; height:48px; display:grid; place-items:center; background:#183754; color:#eaf3fa; border:1px solid #34516d; border-radius:10px; font-size:15px; font-weight:750; letter-spacing:1px; }
+    .subtitle { color:var(--muted); font-size:13px; margin:0; }
+    .header-tools { display:flex; align-items:flex-start; gap:10px; position:relative; }
+    button { cursor:pointer; color:var(--text); background:var(--surface); border:1px solid var(--line); border-radius:7px; padding:9px 14px; font-weight:600; }
+    button:disabled { opacity:.6; cursor:wait; }
+    #theme-toggle { white-space:nowrap; }
+    #settings { position:relative; border:0; margin:0; padding:0; background:transparent; }
+    #settings > summary { border:1px solid var(--line); border-radius:7px; padding:9px 14px; background:var(--surface); white-space:nowrap; }
+    #settings-form { position:absolute; top:calc(100% + 10px); right:0; width:min(430px,calc(100vw - 40px)); padding:22px; background:var(--surface); border:1px solid var(--line); border-radius:10px; z-index:10; box-shadow:0 8px 24px #08172c12; }
+    #settings-form label:first-child { margin-top:0; }
+    #settings-status { margin:12px 0 0; font-size:13px; color:var(--muted); }
+    #settings-form button { margin:8px 6px 0 0; }
+    .summary-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; margin-bottom:24px; }
+    .metric { padding:20px 22px; background:var(--surface); border:1px solid var(--line); border-radius:10px; }
+    .metric-label { display:block; color:var(--muted); font-size:12px; font-weight:650; letter-spacing:.3px; }
+    .metric-value { display:block; font-size:32px; line-height:1.3; font-weight:700; letter-spacing:-1px; margin:7px 0; color:var(--navy); font-variant-numeric:tabular-nums; }
+    .metric-note { color:var(--muted); font-size:12px; margin:0; }
+    .dashboard-main { display:grid; grid-template-columns:minmax(0,1.35fr) minmax(320px,.85fr); gap:24px; align-items:start; }
+    .chat-panel,.routes-panel { min-width:0; padding:26px; border:1px solid var(--line); border-radius:10px; background:var(--surface); }
+    .eyebrow { display:block; color:var(--muted); text-transform:uppercase; font-size:10px; font-weight:750; letter-spacing:1.5px; margin-bottom:8px; }
+    .panel-intro { color:var(--muted); font-size:13px; margin-bottom:22px; }
+    label { display:block; margin:14px 0 7px; font-size:13px; font-weight:650; }
+    input,select,textarea { width:100%; min-width:0; padding:11px 12px; border:1px solid var(--line); border-radius:7px; background:var(--surface-alt); color:var(--text); }
+    textarea { min-height:118px; resize:vertical; line-height:1.6; }
+    textarea::placeholder,input::placeholder { color:var(--muted); opacity:.85; }
+    .question-actions { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-top:12px; }
+    .question-hint { color:var(--muted); font-size:11px; }
+    #send { background:#244c6b; color:#fff; border-color:#244c6b; padding:10px 21px; white-space:nowrap; }
+    #result { margin-top:26px; padding-top:23px; border-top:1px solid var(--line); }
+    #result h2 { font-size:14px; color:var(--muted); letter-spacing:0; }
+    #response,#engineer-answer { white-space:pre-wrap; overflow-wrap:anywhere; line-height:1.75; }
+    #response { font-size:14px; }
+    .note { font-size:12px; color:var(--muted); overflow-wrap:anywhere; }
+    #answer-status:empty { display:none; }
+    #answer-status { margin:14px 0 0; }
+    #loading { color:var(--accent-text); font-size:12px; font-weight:600; margin:14px 0 0; }
+    #error { color:var(--error); white-space:pre-wrap; overflow-wrap:anywhere; }
+    .routes-heading { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:4px; }
+    .routes-heading h2 { margin:0; }
+    .count-tag { background:var(--accent); color:var(--accent-text); font-size:11px; font-weight:650; border-radius:5px; padding:3px 7px; }
+    .route-list { padding:0; margin:0; list-style:none; }
+    .route-item { border-top:1px solid var(--line); padding:12px 0; display:grid; grid-template-columns:minmax(0,1fr) auto; gap:4px 12px; align-items:center; }
+    .route-name { font-size:12px; font-weight:600; overflow-wrap:anywhere; }
+    .route-meta { grid-column:1 / -1; font-size:11px; color:var(--muted); }
+    .status { display:inline-flex; align-items:center; gap:6px; padding:3px 8px; border-radius:5px; font-size:10px; font-weight:700; white-space:nowrap; }
+    .status::before { content:""; width:5px; height:5px; border-radius:50%; background:currentColor; }
+    .status-treat { background:var(--treat-bg); color:var(--treat); }
+    .status-hold { background:var(--hold-bg); color:var(--hold); }
+    .status-review { background:var(--review-bg); color:var(--review); }
+    .route-empty { padding:22px 0; color:var(--muted); font-size:13px; }
+    .legend { display:flex; flex-wrap:wrap; gap:8px; margin:16px 0 12px; }
+    #dashboard-updated { font-size:11px; color:var(--muted); margin:0; }
+    #route-report-link { margin-top:16px; width:100%; font-size:12px; background:var(--surface-alt); }
+    .support-heading { margin:30px 0 14px; display:flex; align-items:baseline; justify-content:space-between; gap:12px; }
+    .support-heading h2 { margin:0; font-size:15px; }
+    .support-heading p { margin:0; color:var(--muted); font-size:12px; }
+    .supporting-reports { display:grid; gap:12px; }
+    details { min-width:0; border:1px solid var(--line); border-radius:9px; background:var(--surface); padding:0 22px; }
+    summary { cursor:pointer; font-weight:600; font-size:13px; padding:17px 0; }
+    details[open] { padding-bottom:20px; }
+    details details { margin:16px 0; padding:0 14px; background:var(--surface-alt); }
+    #diagnostics { margin-top:20px; padding:0 14px; background:var(--surface-alt); }
+    #diagnostics summary { font-size:11px; color:var(--muted); padding:12px 0; }
+    #diagnostics[open] { padding-bottom:12px; }
+    .table-wrap { max-width:100%; overflow-x:auto; border:1px solid var(--line); border-radius:7px; }
+    table { width:100%; border-collapse:collapse; font-size:12px; }
+    th,td { text-align:left; padding:11px 12px; border-bottom:1px solid var(--line); vertical-align:top; overflow-wrap:break-word; }
+    th { background:var(--surface-alt); color:var(--muted); font-size:10px; letter-spacing:.2px; font-weight:650; }
+    tr:last-child td { border-bottom:0; }
+    tfoot td { font-weight:650; background:var(--surface-alt); border-top:1px solid var(--line); }
+    #warnings { font-size:13px; }
+    #sources p,#answer-sources p { margin-bottom:7px; }
+    .app-footer { display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; border-top:1px solid var(--line); padding-top:18px; margin-top:26px; color:var(--muted); font-size:11px; }
+    @media(max-width:900px) { .app-shell{padding:24px} .dashboard-main{grid-template-columns:minmax(0,1.15fr) minmax(285px,.85fr);gap:16px} .chat-panel,.routes-panel{padding:20px} .metric{padding:17px} }
+    @media(max-width:720px) { .app-shell{padding:20px 16px} .app-header{align-items:flex-start;flex-direction:column;gap:18px;margin-bottom:22px} .header-tools{width:100%;justify-content:flex-end} #settings-form{width:min(430px,calc(100vw - 32px))} .dashboard-main{grid-template-columns:minmax(0,1fr)} .summary-grid{gap:8px} .metric{padding:13px 10px} .metric-label{font-size:10px;min-height:30px} .metric-value{font-size:25px} .metric-note{font-size:10px} .support-heading{align-items:flex-start;flex-direction:column;gap:3px} .question-hint{max-width:60%} details{padding:0 14px} th,td{padding:8px} table{min-width:640px} }
+    @media(max-width:380px) { .summary-grid{grid-template-columns:minmax(0,1fr)} .metric{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 10px;align-items:center} .metric-label{min-height:0} .metric-value{grid-column:2;grid-row:1 / 3;margin:0} .metric-note{grid-column:1} }
   </style>
 </head>
 <body>
-  <h1>Winter Watch</h1>
-  <p>County Cavan roads team — Tonight's Call and Five Winters (Parts 2 and 3). Recommendations only; the Duty Engineer makes the final decision.</p>
-  <details id="settings" open>
+  <div class="app-shell">
+  <header class="app-header">
+    <div class="brand"><div class="brand-mark" aria-hidden="true">WW</div><div><h1>Winter Watch</h1><p class="subtitle">County Cavan Winter Road Operations</p></div></div>
+    <div class="header-tools">
+      <button type="button" id="theme-toggle" aria-label="Switch to dark mode" aria-pressed="false">Dark mode</button>
+  <details id="settings">
     <summary>AI Settings</summary>
     <form id="settings-form">
       <label for="provider">Provider</label>
@@ -42,10 +119,22 @@
       <p id="settings-status" role="status"></p>
     </form>
   </details>
+    </div>
+  </header>
+  <div class="summary-grid" aria-label="Current operations summary" aria-live="polite">
+    <div class="metric"><span class="metric-label">Routes to treat</span><strong class="metric-value" id="metric-treat">&mdash;</strong><p class="metric-note">Recommended under the current forecast</p></div>
+    <div class="metric"><span class="metric-label">Lowest ground temperature</span><strong class="metric-value" id="metric-temperature">&mdash;</strong><p class="metric-note">Next 18 forecast hours</p></div>
+    <div class="metric"><span class="metric-label">Depot resource warnings</span><strong class="metric-value" id="metric-warnings">&mdash;</strong><p class="metric-note" id="metric-warning-note">Salt, truck and driver availability</p></div>
+  </div>
+  <main>
+  <div class="dashboard-main">
+    <div class="chat-panel">
+      <span class="eyebrow">Decision support</span><h2>Ask Winter Watch</h2>
+      <p class="panel-intro">A clear answer for tonight, the past five winters or your next decision.</p>
   <form id="question-form">
-    <label for="question">Question</label>
+    <label for="question">Your question</label>
     <textarea id="question" required placeholder="Which routes should we treat tonight, and what constraints need attention?"></textarea>
-    <button id="send" type="submit">Send</button>
+    <div class="question-actions"><span class="question-hint">Recommendations support your judgement.</span><button id="send" type="submit">Ask Winter Watch</button></div>
   </form>
   <section id="result" aria-busy="false">
     <h2>Answer</h2>
@@ -60,6 +149,18 @@
     <p id="usage" class="note">Token usage: no request yet.</p>
   </details>
   <p id="loading" role="status" hidden>Waiting for Gemini…</p>
+    </div>
+    <aside class="routes-panel" aria-label="Route overview">
+      <div class="routes-heading"><h2>Route overview</h2><span class="count-tag" id="route-count">Awaiting data</span></div>
+      <p class="panel-intro">Current recommendations at a glance.</p>
+      <ul id="route-overview" class="route-list"><li class="route-empty">Loading current route conditions...</li></ul>
+      <div class="legend" aria-label="Route status key"><span class="status status-treat">Treat</span><span class="status status-hold">Hold</span><span class="status status-review">Review</span></div>
+      <p id="dashboard-updated" role="status">Fetching current sources...</p>
+      <button type="button" id="route-report-link">View full route report</button>
+    </aside>
+  </div>
+  <div class="support-heading"><h2>Supporting reports</h2><p>Detailed evidence, historical analysis and engineer review</p></div>
+  <div class="supporting-reports">
   <details id="tonight" hidden>
     <summary>Tonight's Call</summary>
     <p id="warnings" role="status"></p>
@@ -98,6 +199,10 @@
     <p class="note">Sources: <a href="https://bdaib-hub.pages.dev/data/winter/history.csv">history.csv</a>, <a href="https://bdaib-hub.pages.dev/data/winter/routes.csv">routes.csv</a>, <a href="https://bdaib-hub.pages.dev/data/winter/plan.md">plan.md</a>, <a href="https://bdaib-hub.pages.dev/data/winter/tonight.csv">tonight.csv</a>. Current-source timestamps appear under Tonight's Call; the historical timestamp appears under Five Winters.</p>
     <div id="engineer-answer" style="white-space: pre-wrap" hidden></div>
   </details>
+  </div>
+  </main>
+  <footer class="app-footer"><span>County Cavan &middot; Winter Road Operations</span><span>Advisory only. The Duty Engineer retains final authority.</span></footer>
+  </div>
   <script>
     'use strict';
     const storageKey = 'winterWatch.aiSettings.v1';
@@ -105,6 +210,68 @@
     const keyInput = el('api-key');
     const modelInput = el('model');
     const status = el('settings-status');
+
+    const themeStorageKey='winterWatch.theme';
+    function applyTheme(theme) {
+      const dark=theme==='dark';
+      document.documentElement.dataset.theme=dark?'dark':'light';
+      el('theme-toggle').textContent=dark?'Light mode':'Dark mode';
+      el('theme-toggle').setAttribute('aria-label',dark?'Switch to light mode':'Switch to dark mode');
+      el('theme-toggle').setAttribute('aria-pressed',String(dark));
+    }
+    let preferredTheme;
+    try{preferredTheme=localStorage.getItem(themeStorageKey)}catch{}
+    applyTheme(preferredTheme==='light'||preferredTheme==='dark'?preferredTheme:window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
+    el('theme-toggle').addEventListener('click',()=>{
+      const theme=document.documentElement.dataset.theme==='dark'?'light':'dark';
+      applyTheme(theme);try{localStorage.setItem(themeStorageKey,theme)}catch{}
+    });
+    let dashboardGeneration=0;
+    function clearDashboard(message) {
+      for(const id of ['metric-treat','metric-temperature','metric-warnings'])el(id).textContent='\u2014';
+      el('metric-warning-note').textContent='Salt, truck and driver availability';
+      el('route-count').textContent='Awaiting data';
+      el('route-overview').replaceChildren();
+      const li=document.createElement('li');li.className='route-empty';li.textContent=message;el('route-overview').append(li);
+      el('dashboard-updated').textContent=message;
+    }
+    function renderDashboard(calculated) {
+      el('metric-treat').textContent=String(calculated.rows.filter(r=>r.decision.startsWith('Recommend')).length);
+      el('metric-temperature').textContent=Math.min(...calculated.rows.map(r=>r.min)).toFixed(1)+'\u00b0C';
+      el('metric-warnings').textContent=String(calculated.warnings.length);
+      const warningDepots=Object.keys(calculated.resources).filter(name=>calculated.warnings.some(w=>w.startsWith(name+':')));
+      el('metric-warning-note').textContent=warningDepots.length?warningDepots.join(' / '):'No stock or availability alerts';
+      el('route-count').textContent=calculated.rows.length+' routes';
+      el('route-overview').replaceChildren();
+      for(const r of calculated.rows) {
+        const state=r.decision.startsWith('Recommend')?'Treat':r.decision.startsWith('Hold')?'Hold':'Review';
+        const li=document.createElement('li');li.className='route-item';
+        const name=document.createElement('span');name.className='route-name';name.textContent=r.id+' '+r.route;
+        const badge=document.createElement('span');badge.className='status status-'+state.toLowerCase();badge.textContent=state;badge.title=r.decision;
+        const meta=document.createElement('span');meta.className='route-meta';meta.textContent=r.min.toFixed(1)+'\u00b0C ground / '+r.salt.toFixed(2)+' t salt / '+r.depot;
+        if(state==='Treat')meta.textContent+=' / '+departureLabel(r);
+        else if(state==='Review')meta.textContent+=' / '+r.decision.replace(/^Blocked - /,'');
+        li.append(name,badge,meta);el('route-overview').append(li);
+      }
+      el('dashboard-updated').textContent='Live calculations / '+displayTime(Date.parse(calculated.asOf))+' Dublin. Full source timestamps in the route report.';
+    }
+    async function loadDashboard() {
+      const generation=dashboardGeneration;
+      const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),90000);
+      try {
+        const fresh=await freshData(controller.signal),calculated=calculate(fresh);
+        if(generation!==dashboardGeneration)return;
+        render(calculated,fresh);
+      } catch(error) {
+        if(generation!==dashboardGeneration)return;
+        clearDashboard('Current conditions unavailable. Ask a question to retry.');
+        diagnostic(error.message,keyInput.value.trim());
+      } finally {clearTimeout(timeout)}
+    }
+    el('route-report-link').addEventListener('click',()=>{
+      if(el('tonight').hidden){el('dashboard-updated').textContent='Current route data is unavailable. Ask a question to refresh it.';return}
+      el('tonight').open=true;el('tonight').scrollIntoView({behavior:'auto',block:'start'});
+    });
     function redact(value, key) {
       const text = String(value);
       return key ? text.split(key).join('[REDACTED]') : text;
@@ -472,6 +639,7 @@
     }
     const departureLabel = r => !r.decision.startsWith('Recommend treatment') ? '\u2014' : r.departure !== null ? displayTime(r.departure) : 'Timing requires engineer review';
     function render(calculated,data) {
+      renderDashboard(calculated);
       el('route-results').replaceChildren();
       for (const r of calculated.rows) {
         const tr=document.createElement('tr');
@@ -729,6 +897,7 @@
       event.preventDefault();if(el('send').disabled)return;
       const question=el('question').value.trim(),key=keyInput.value.trim(),model=modelInput.value.trim();
       if(!question)return;
+      dashboardGeneration++;clearDashboard('Refreshing current conditions...');
       el('send').disabled=true;el('loading').hidden=false;el('result').setAttribute('aria-busy','true');
       el('response').textContent='Fetching current evidence and preparing your answer...';el('answer-status').textContent='';el('answer-sources').replaceChildren();el('answer-details').textContent='';
       el('error').textContent='';el('error').hidden=true;el('usage').textContent='Token usage: unavailable.';
@@ -739,6 +908,7 @@
       try {
         let fresh=null,actual=null;
         try{fresh=await freshData(controller.signal);actual=calculate(fresh)}catch(e){diagnostic(e.message,key);if(questionIntent(question,null).type!=='history')throw e}
+        if(!actual)clearDashboard('Current conditions unavailable; historical evidence only.');
         const intent=questionIntent(question,fresh);
         const history=['history','engineer'].includes(intent.type)?(historyLoading?await historyLoading:historyCache):historyCache;
         if(actual){render(actual,fresh);renderEngineerReview(history,fresh,actual)}
@@ -763,11 +933,12 @@
           if(!valid)throw new Error('Gemini response was empty, malformed or did not match the verified question-specific claims. Unverified wording was not displayed.');
           el('response').textContent=redact(valid,key);el('answer-status').textContent='Answer ready.';
         }catch(e){diagnostic(e.name==='AbortError'?'Gemini request timed out':e.message,key);el('answer-status').textContent='AI explanation unavailable. The calculated answer is shown.'}
-      }catch(e){diagnostic(e.message,key);el('response').textContent='Current data could not be checked. Retry before making a treatment decision; see diagnostics for details.';el('answer-status').textContent='No calculation-based recommendation issued.'}
+      }catch(e){clearDashboard('Current conditions unavailable. Ask a question to retry.');diagnostic(e.message,key);el('response').textContent='Current data could not be checked. Retry before making a treatment decision; see diagnostics for details.';el('answer-status').textContent='No calculation-based recommendation issued.'}
       finally{clearTimeout(timeout);el('send').disabled=false;el('loading').hidden=true;el('result').setAttribute('aria-busy','false')}
     });
     // One initial historical fetch; subsequent questions reuse memory until explicit refresh.
     loadHistory();
+    loadDashboard();
   </script>
 </body>
 </html>
